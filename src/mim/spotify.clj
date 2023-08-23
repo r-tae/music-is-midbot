@@ -147,28 +147,16 @@
       (refresh-tokens refresh-token)
       access-token)))
 
-
 (defn auth-handler [request]
   (u/log ::oauth-received :request request)
   (condp = (:uri request)
     "/oauth2" (let [{access-token :access_token refresh-token :refresh_token} (get-authentication-response (get-state :auth :csrf-token) (:params request))]
-                (update-state [:auth :tokens] [access-token refresh-token])
+                (when (and access-token refresh-token)
+                  (update-state [:auth :tokens] [access-token refresh-token]))
                 {:status 200 :body "<script>window.close()</script>"})
     "/interaction" (ringr/redirect (authorize-uri oauth2-params (get-state :auth :csrf-token)))
     {:status 200
      :body (:uri request)}))
-
-
-;; #(condp = (:uri %)
-;;    "/oauth2" (do
-;;                (on-oauth-request)
-;;                (let [tokens? (get-authentication-response (get-state :auth :csrf-token) %)]
-;;                  (u/log ::parsed-tokens :tokens tokens?)
-;;                  (update-state [:auth :tokens] tokens?))
-;;                {:status 200 :body "<script>window.close()</script>"})
-;;    "/interaction"  (ringr/redirect (authorize-uri oauth2-params (get-state :auth :csrf-token)))
-;;    {:status 200
-;;     :body (:uri %)})
 
 (defn start-auth-server
   "Starts our auth web server."
