@@ -20,6 +20,3 @@ Run that uberjar:
 ## License
 
 This code is currently not provided under any license.
-_section of the `README.md` file!_
-
-Distributed under the Eclipse Public License version 1.0.
