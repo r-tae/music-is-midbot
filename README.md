@@ -4,7 +4,7 @@ Monitor the Music is Mid Discord server for Spotify links and add them to a play
 
 ## Development
 
-Run the project's tests (they'll fail until you edit them):
+Run the project's tests:
 
     $ clojure -T:build test
 
