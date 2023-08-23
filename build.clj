@@ -3,9 +3,9 @@
   (:require [clojure.tools.deps :as t]
             [clojure.tools.build.api :as b]))
 
-(def lib 'r-tae.music-is-midbot)
-(def version "0.1.0")
-(def main 'r-tae.music-is-midbot)
+(def lib 'mim.bot)
+(def version "0.1.1")
+(def main 'mim.bot)
 (def class-dir "target/classes")
 
 (defn test "Run all the tests." [opts]

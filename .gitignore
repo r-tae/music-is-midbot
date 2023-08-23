@@ -28,3 +28,4 @@
 /classes
 /target
 .env
+.state.edn
