@@ -4,7 +4,7 @@
             [clojure.tools.build.api :as b]))
 
 (def lib 'mim.bot)
-(def version "0.1.2")
+(def version "0.1.3")
 (def main 'mim.bot)
 (def class-dir "target/classes")
 

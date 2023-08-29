@@ -106,10 +106,6 @@
    "&state="
    (url-encode csrf-token)))
 
-(defn log
-  [x]
-  (u/log ::exception :exception x)
-  x)
 (defn get-authentication-response [csrf-token response-params]
   (if (= csrf-token (:state response-params))
     (try
@@ -134,7 +130,7 @@
                                    :refresh_token    refresh-token}
                      :basic-auth [(:client-id oauth2-params) (:client-secret oauth2-params)]
                      :as          :json})]
-     (update-state [:auth :tokens] [access-token refresh-token])
+     (when (and access-token refresh-token) (update-state [:auth :tokens] [access-token refresh-token]))
      access-token)
    (catch [:status 401] _ nil)))
 
@@ -148,10 +144,10 @@
       access-token)))
 
 (defn auth-handler [request]
-  (u/log ::oauth-received :request request)
   (condp = (:uri request)
     "/oauth2" (let [{access-token :access_token refresh-token :refresh_token} (get-authentication-response (get-state :auth :csrf-token) (:params request))]
                 (when (and access-token refresh-token)
+                  (u/log ::oauth-flow-completed :request request)
                   (update-state [:auth :tokens] [access-token refresh-token]))
                 {:status 200 :body "<script>window.close()</script>"})
     "/interaction" (ringr/redirect (authorize-uri oauth2-params (get-state :auth :csrf-token)))
